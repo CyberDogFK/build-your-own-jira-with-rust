@@ -8,6 +8,8 @@ use super::recap::Status;
 /// - https://docs.rs/chrono/0.4.11/chrono/
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
+use std::time::SystemTime;
+use core::option::Option;
 
 struct TicketStore {
     data: HashMap<TicketId, Ticket>,
@@ -29,8 +31,10 @@ impl TicketStore {
         }
     }
 
-    pub fn save(&mut self, ticket: Ticket) -> TicketId {
+    pub fn save(&mut self, mut ticket: Ticket) -> TicketId {
         let id = self.generate_id();
+        ticket.created_at = Some(DateTime::from(SystemTime::now()));
+        ticket.id = Some(id);
         self.data.insert(id, ticket);
         id
     }
@@ -47,9 +51,11 @@ impl TicketStore {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Ticket {
+    id: Option<TicketId>,
     title: String,
     description: String,
     status: Status,
+    created_at: Option<DateTime<Utc>>,
 }
 
 impl Ticket {
@@ -66,13 +72,21 @@ impl Ticket {
     }
 
     // The datetime when the ticket was saved in the store, if it was saved.
-    pub fn created_at(&self) -> __ {
-        todo!()
+    pub fn created_at(&self) -> Option<&DateTime<Utc>> {
+        if let Some(it) = &self.created_at {
+            Some(it)
+        } else {
+            None
+        }
     }
 
     // The id associated with the ticket when it was saved in the store, if it was saved.
-    pub fn id(&self) -> __ {
-        todo!()
+    pub fn id(&self) -> Option<&TicketId> {
+        if let Some(id) = &self.id {
+            Some(id)
+        } else {
+            None
+        }
     }
 }
 
@@ -88,9 +102,11 @@ pub fn create_ticket(title: String, description: String, status: Status) -> Tick
     }
 
     Ticket {
+        id: None,
         title,
         description,
         status,
+        created_at: None,
     }
 }
 

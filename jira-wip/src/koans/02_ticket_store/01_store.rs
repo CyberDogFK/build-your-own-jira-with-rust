@@ -12,6 +12,7 @@
 /// You can read more about the HashMap in Rust here:
 /// https://doc.rust-lang.org/std/collections/struct.HashMap.html
 use std::collections::HashMap;
+use std::ops::Deref;
 /// Let's import what we worked on in the previous set of exercises.
 use super::recap::Ticket;
 
@@ -21,6 +22,8 @@ use super::recap::Ticket;
 /// the stored value - HashMap<K, V>.
 ///
 /// Let's set the value type to our Ticket, and we will use an unsigned integer for our ids.
+
+#[derive(Debug)]
 struct TicketStore {
     /// The collection of stored tickets.
     data: HashMap<u32, Ticket>,
@@ -40,11 +43,11 @@ impl TicketStore {
     /// We take `&mut self` because we will have to mutate our HashMap to insert a new
     /// key-value pair.
     pub fn save(&mut self, ticket: Ticket, id: u32) {
-        todo!()
+        self.data.insert(id, ticket);
     }
 
     pub fn get(&self, id: &u32) -> &Ticket {
-        todo!()
+        self.data.get(id).unwrap()
     }
 }
 

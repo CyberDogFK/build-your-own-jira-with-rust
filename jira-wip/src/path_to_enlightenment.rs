@@ -44,3 +44,9 @@ mod type_as_constraints;
 #[path = "koans/02_ticket_store/06_result.rs"]
 mod result;
 
+#[path = "koans/02_ticket_store/07_vec.rs"]
+mod vec;
+
+#[path = "koans/02_ticket_store/08_delete_and_update.rs"]
+mod delete_and_update;
+

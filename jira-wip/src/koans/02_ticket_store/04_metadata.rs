@@ -7,9 +7,9 @@ use super::recap::Status;
 /// - https://en.wikipedia.org/wiki/Coordinated_Universal_Time
 /// - https://docs.rs/chrono/0.4.11/chrono/
 use chrono::{DateTime, Utc};
+use core::option::Option;
 use std::collections::HashMap;
 use std::time::SystemTime;
-use core::option::Option;
 
 struct TicketStore {
     data: HashMap<TicketId, Ticket>,

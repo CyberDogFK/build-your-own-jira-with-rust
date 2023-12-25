@@ -15,7 +15,7 @@ use super::visibility::ticket::Status;
 pub struct Ticket {
     title: String,
     description: String,
-    status: Status
+    status: Status,
 }
 
 /// Methods on a struct are defined in `impl` blocks.
@@ -80,7 +80,7 @@ impl Ticket {
     }
 
     pub fn status(&self) -> &Status {
-       &self.status
+        &self.status
     }
 }
 
@@ -104,8 +104,8 @@ pub fn create_ticket(title: String, description: String, status: Status) -> Tick
 
 #[cfg(test)]
 mod tests {
-    use super::{create_ticket, Ticket};
     use super::super::visibility::ticket::Status;
+    use super::{create_ticket, Ticket};
 
     fn verify_without_tampering() {
         let ticket: Ticket = create_ticket("A title".into(), "A description".into(), Status::ToDo);

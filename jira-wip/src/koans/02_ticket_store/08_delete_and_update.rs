@@ -3,6 +3,7 @@ use super::recap::Status;
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 use std::error::Error;
+use std::time::SystemTime;
 
 /// There are only two pieces missing: deleting a ticket and updating a ticket
 /// in our `TicketStore`.
@@ -58,7 +59,7 @@ impl TicketStore {
     /// If the `id` passed in matches a ticket in the store, we return the edited ticket.
     /// If it doesn't, we return `None`.
     pub fn update(&mut self, id: &TicketId, patch: TicketPatch) -> Option<&Ticket> {
-        if let Some(ticket) = self.data.get_mut() {
+        if let Some(ticket) = self.data.get_mut(id) {
             if let Some(title) = patch.title {
                 ticket.title = title
             }
@@ -68,9 +69,8 @@ impl TicketStore {
             if let Some(status) = patch.status {
                 ticket.status = status
             }
-            Some(
-                ticket
-            )
+            ticket.updated_at = DateTime::from(SystemTime::now());
+            Some(ticket)
         } else {
             None
         }
@@ -80,11 +80,10 @@ impl TicketStore {
     /// with some additional metadata.
     /// If it doesn't, we return `None`.
     pub fn delete(&mut self, id: &TicketId) -> Option<DeletedTicket> {
-        self.data.remove(
-            id
-        )
-
-        None
+        self.data.remove(id).map(|ticket| DeletedTicket {
+            ticket,
+            deleted_at: DateTime::from(SystemTime::now()),
+        })
     }
 
     fn generate_id(&mut self) -> TicketId {

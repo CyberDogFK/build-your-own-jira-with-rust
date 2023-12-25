@@ -31,7 +31,7 @@ fn create_ticket(title: String, description: String, status: Status) -> Ticket {
     Ticket {
         title,
         description,
-        status
+        status,
     }
 }
 

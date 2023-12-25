@@ -58,10 +58,14 @@ impl TicketDraft {
             return Err(ValidationError("Title cannot be empty!".to_string()));
         }
         if title.len() > 50 {
-            return Err(ValidationError("Title cannot be longer that 50 characters".to_string()))
+            return Err(ValidationError(
+                "Title cannot be longer that 50 characters".to_string(),
+            ));
         }
         if description.len() > 3000 {
-            return Err(ValidationError("Description cannot be longer that 3000 characters".to_string()))
+            return Err(ValidationError(
+                "Description cannot be longer that 3000 characters".to_string(),
+            ));
         }
 
         let draft = TicketDraft { title, description };
@@ -85,9 +89,7 @@ pub struct ValidationError(String);
 /// We can derive `Debug`, but `Display` has to be implemented explicitly:
 /// `Display` rules how your struct is printed out for user-facing input, hence it cannot be
 /// derived automatically.
-impl Error for ValidationError {
-
-}
+impl Error for ValidationError {}
 
 impl std::fmt::Display for ValidationError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {

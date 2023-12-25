@@ -60,7 +60,7 @@ impl PartialEq for Status {
             (Status::Done, Status::Done) => true,
             (Status::InProgress, Status::InProgress) => true,
             (Status::Blocked, Status::Blocked) => true,
-            _ => false
+            _ => false,
         }
     }
 }

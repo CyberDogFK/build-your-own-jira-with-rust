@@ -49,4 +49,6 @@ mod vec;
 
 #[path = "koans/02_ticket_store/08_delete_and_update.rs"]
 mod delete_and_update;
+#[path = "koans/02_ticket_store/09_store_recap.rs"]
+mod store_recap;
 

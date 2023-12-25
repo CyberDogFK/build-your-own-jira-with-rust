@@ -64,8 +64,7 @@ mod tests {
     /// visibility to make the use statement compile!
     /// Once you have verified that it indeed doesn't compile, comment it out.
     fn should_not_be_possible() {
-        let ticket: Ticket =
-            create_ticket("A title".into(), "A description".into(), Status::ToDo);
+        let ticket: Ticket = create_ticket("A title".into(), "A description".into(), Status::ToDo);
 
         // You should be seeing this error when trying to run this koan:
         //

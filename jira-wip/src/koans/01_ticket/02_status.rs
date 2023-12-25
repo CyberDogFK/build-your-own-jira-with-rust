@@ -30,7 +30,6 @@ pub enum Status {
     Done,
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -66,7 +65,9 @@ mod tests {
             //
             // We are panicking in this case, thus making the test fail if this branch of our
             // match statement gets executed.
-            Status::ToDo | Status::InProgress | Status::Done => panic!("The ticket is not blocked!")
+            Status::ToDo | Status::InProgress | Status::Done => {
+                panic!("The ticket is not blocked!")
+            }
         }
     }
 }

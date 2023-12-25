@@ -58,3 +58,6 @@ mod cli;
 #[path = "koans/03_cli/01_persistence.rs"]
 mod persistence;
 
+#[path = "koans/03_cli/02_the_end.rs"]
+mod the_end;
+

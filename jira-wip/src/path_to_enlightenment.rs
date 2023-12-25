@@ -55,3 +55,6 @@ mod store_recap;
 #[path = "koans/03_cli/00_cli.rs"]
 mod cli;
 
+#[path = "koans/03_cli/01_persistence.rs"]
+mod persistence;
+

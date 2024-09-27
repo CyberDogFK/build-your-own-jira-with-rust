@@ -23,7 +23,7 @@
 //!
 //! When you are ready, uncomment the appropriate lines from src/main.rs and
 //! run `cargo run --bin jira-wip` in your terminal!
-use super::store_recap::{TicketStore, Status, TicketDraft, TicketPatch, TicketTitle, TicketDescription};
+use super::store_recap::{Ticket, TicketStore, Status, TicketDraft, TicketPatch, TicketTitle, TicketDescription, ValidationError};
 use super::id_generation::TicketId;
 use std::error::Error;
 use std::str::FromStr;
@@ -34,7 +34,8 @@ use std::fmt::Formatter;
 pub enum Command {
     /// Create a ticket on your board.
     Create {
-        __
+        description: TicketDescription,
+        title: TicketTitle,
     },
     /// Edit the details of an existing ticket.
     Edit {
@@ -53,7 +54,7 @@ pub enum Command {
     },
     /// Delete a ticket from the store passing the ticket id.
     Delete {
-        __
+        ticket_id: TicketId
     },
     /// List all existing tickets.
     List,
@@ -68,23 +69,37 @@ impl FromStr for Status {
     type Err = ParsingError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        __
+        match s {
+            "ToDo" => Ok(Status::ToDo),
+            "InProgress" => Ok(Status::InProgress),
+            "Blocked" => Ok(Status::Blocked),
+            "Done" => Ok(Status::Done),
+            _ => Err(ParsingError("Wrong input".to_string()))
+        }
     }
 }
 
 impl FromStr for TicketTitle {
-    __
+    type Err = ValidationError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        TicketTitle::new(s.to_string())
+    }
 }
 
 impl FromStr for TicketDescription {
-    __
+    type Err = ValidationError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        TicketDescription::new(s.to_string())
+    }
 }
 
 /// Our error struct for parsing failures.
 #[derive(Debug)]
 pub struct ParsingError(String);
 
-impl Error for ParsingError { }
+impl Error for ParsingError {}
 
 impl std::fmt::Display for ParsingError {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
@@ -104,7 +119,12 @@ impl std::fmt::Display for ParsingError {
 pub fn handle_command(ticket_store: &mut TicketStore, command: Command) -> Result<(), Box<dyn Error>> {
     match command {
         Command::Create { description, title } => {
-            todo!()
+            ticket_store.save(
+                TicketDraft {
+                    title,
+                    description,
+                }
+            );
         }
         Command::Edit {
             id,
@@ -112,7 +132,14 @@ pub fn handle_command(ticket_store: &mut TicketStore, command: Command) -> Resul
             description,
             status,
         } => {
-            todo!()
+            ticket_store.update(
+                &id,
+                TicketPatch {
+                    title,
+                    description,
+                    status
+                }
+            );
         }
         Command::Delete { ticket_id } => match ticket_store.delete(&ticket_id) {
             Some(deleted_ticket) => println!(
